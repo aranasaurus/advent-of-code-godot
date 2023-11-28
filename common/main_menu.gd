@@ -48,8 +48,7 @@ func load_day(path: String) -> void:
 		var cookie = FileAccess.get_file_as_string(session_path).strip_edges()
 		req.request(url, ["Cookie: session=%s" % cookie])
 
-func _on_exit_button_button_up() -> void:
-	get_tree().quit()
+	get_tree().change_scene_to_file(path + "/day.tscn")
 
 func _on_back_button_button_up() -> void:
 	load_menu(root_path)

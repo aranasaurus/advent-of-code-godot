@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://wnfaqu4vv6gt"]
+[gd_scene load_steps=3 format=3 uid="uid://wnfaqu4vv6gt"]
 
 [ext_resource type="Script" path="res://common/main_menu.gd" id="1_5rpxc"]
+[ext_resource type="PackedScene" uid="uid://dqk3bucs0n7pq" path="res://common/exit_button.tscn" id="2_6odqw"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -52,11 +53,9 @@ layout_mode = 2
 text = "Back
 "
 
-[node name="ExitButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ExitButton" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_6odqw")]
 layout_mode = 2
-text = "Exit"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_button_up"]
-[connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_button_up"]
