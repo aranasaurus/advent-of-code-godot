@@ -88,7 +88,8 @@ func _on_get_input_button_button_up() -> void:
 	var session_path := "res://common/session.txt"
 	if not FileAccess.file_exists(session_path):
 		print("Session not found in %s" % session_path)
-		print("You need to go to adventofcode.com in a browser, log in, and go to an input file (https://adventofcode.com/2022/day/1/input for example) and pull the session from your browser's inspection tab / request headers. Then paste that without the 'session=' into res://common/session.txt. This file is ignored in the .gitignore.")
+		print("Opening %s in your browser so you can pull the cookie/session from your inspection tab / request headers. Paste the session value (just the value, no 'session=' or 'session: ') into res://common/session.txt. Don't worry, that file is ignored in the .gitignore." % url)
+		OS.shell_open(url)
 		return
 	
 	var cookie := "Cookie: session=%s" % FileAccess.get_file_as_string(session_path).strip_edges()
@@ -103,6 +104,8 @@ func _on_http_request_request_completed(result: int, _response_code: int, _heade
 		load_day(path_stack.front())
 	else:
 		print("Download failed: %d" % result)
+		print("Opening the input file in a browser instead.")
+		OS.shell_open(url_for_day_path() + "/input")
 
 func _on_create_sample_button_button_up() -> void:
 	var file := FileAccess.open(path_stack.front() + "/sample.txt", FileAccess.WRITE)
