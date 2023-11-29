@@ -103,5 +103,6 @@ layout_mode = 2
 
 [connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/DayButtons/CreateSampleButton" to="." method="_on_create_sample_button_button_up"]
 [connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/DayButtons/FetchInputButton" to="." method="_on_get_input_button_button_up"]
+[connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/DayButtons/RunContainer/RunButton" to="." method="_on_run_button_button_up"]
 [connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_button_up"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

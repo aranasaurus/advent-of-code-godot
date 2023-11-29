@@ -113,3 +113,7 @@ func _on_create_sample_button_button_up() -> void:
 	file.close()
 	
 	load_day(path_stack.front())
+
+func _on_run_button_button_up() -> void:
+	var solution = load(path_stack.front() + "/solution.tscn").instantiate()
+	solution.run(input_choices.get_item_text(input_choices.selected))
