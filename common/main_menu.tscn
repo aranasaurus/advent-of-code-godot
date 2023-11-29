@@ -56,6 +56,4 @@ text = "Back
 [node name="ExitButton" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_6odqw")]
 layout_mode = 2
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
-
 [connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_button_up"]
