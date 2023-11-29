@@ -1,18 +1,33 @@
 extends Control
 class_name MainMenu
 
-@onready var button_container: VBoxContainer = %ButtonContainer
+@onready var navigation_buttons: VBoxContainer = %NavigationButtons
 @onready var back_button: Button = %BackButton
+@onready var day_buttons: VBoxContainer = %DayButtons
+@onready var input_choices: OptionButton = %InputChoices
+@onready var http_request: HTTPRequest = $HTTPRequest
 
 const root_path: String = "res://entries"
+var path_stack := [root_path]
 
 func _ready() -> void:
-	load_menu(root_path)
+	load_navigation_menu(root_path)
 
-func load_menu(path: String) -> void:
-	for child in button_container.get_children():
+func navigate_to(path: String) -> void:
+	path_stack.push_front(path)
+	load_navigation_menu(path)
+
+func navigate_back() -> void:
+	path_stack.pop_front()
+	
+	load_navigation_menu(root_path if path_stack.is_empty() else path_stack.front())
+
+func load_navigation_menu(path: String) -> void:
+	for child in navigation_buttons.get_children():
 		child.queue_free()
 	
+	navigation_buttons.visible = true
+	day_buttons.visible = false
 	back_button.visible = path != root_path
 	
 	var directories := DirAccess.get_directories_at(path)
@@ -20,15 +35,60 @@ func load_menu(path: String) -> void:
 		var button := Button.new()
 		button.text = dir
 		if path == root_path:
-			button.button_up.connect(func(): load_menu("%s/" % root_path + "%s/day" % dir))
+			button.button_up.connect(func(): 
+				var next_path = root_path + "/%s/day" % dir
+				path_stack.push_front(next_path)
+				load_navigation_menu(next_path)
+			)
 		else:
 			button.button_up.connect(func():
 				load_day(path + "/" + dir)
 			)
-		button_container.add_child(button)
+		navigation_buttons.add_child(button)
 
-func load_day(path: String) -> void:
-	get_tree().change_scene_to_file(path + "/day.tscn")
+func load_day(path: String):
+	if path != path_stack.front():
+		path_stack.push_front(path)
+	
+	input_choices.clear()
+	
+	navigation_buttons.visible = false
+	day_buttons.visible = true
+	back_button.visible = true
+	
+	var files := DirAccess.get_files_at(path)
+	for file in files:
+		if file.get_extension() == "txt":
+			input_choices.add_item(file.get_file())
+
+func url_for_day_path(path: String = path_stack.front()) -> String:
+	return path.replace(root_path, "https://adventofcode.com")
 
 func _on_back_button_button_up() -> void:
-	load_menu(root_path)
+	navigate_back()
+
+func _on_get_input_button_button_up() -> void:
+	var path: String = path_stack.front()
+	var file_path := path + "/input.txt"
+	
+	http_request.download_file = file_path
+	
+	var url = url_for_day_path(path) + "/input"
+	var session_path := "res://common/session.txt"
+	if not FileAccess.file_exists(session_path):
+		print("Session not found in %s" % session_path)
+		print("You need to go to adventofcode.com in a browser, log in, and go to an input file (https://adventofcode.com/2022/day/1/input for example) and pull the session from your browser's inspection tab / request headers. Then paste that without the 'session=' into res://common/session.txt. This file is ignored in the .gitignore.")
+		return
+	
+	var cookie := "Cookie: session=%s" % FileAccess.get_file_as_string(session_path).strip_edges()
+	print("Downloading input.txt from " + url + " using cookie '%s'" % cookie)
+	http_request.request(url, [cookie])
+
+func _on_http_request_request_completed(result: int, _response_code: int, _headers: PackedStringArray, _body: PackedByteArray) -> void:
+	# TODO: Make a Toast system of some kind and show these messages (or something similar) in the UI
+	print("Request completed")
+	if result == HTTPRequest.RESULT_SUCCESS:
+		print("Successfully downloaded %d bytes" % http_request.get_downloaded_bytes())
+		load_day(path_stack.front())
+	else:
+		print("Download failed: %d" % result)
