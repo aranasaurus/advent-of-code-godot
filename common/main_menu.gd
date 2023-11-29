@@ -3,7 +3,11 @@ class_name MainMenu
 
 @onready var navigation_buttons: VBoxContainer = %NavigationButtons
 @onready var back_button: Button = %BackButton
+
 @onready var day_buttons: VBoxContainer = %DayButtons
+@onready var link_button: LinkButton = %LinkButton
+@onready var create_sample_button: Button = %CreateSampleButton
+@onready var fetch_input_button: Button = %FetchInputButton
 @onready var input_choices: OptionButton = %InputChoices
 @onready var http_request: HTTPRequest = $HTTPRequest
 
@@ -56,6 +60,12 @@ func load_day(path: String):
 	day_buttons.visible = true
 	back_button.visible = true
 	
+	link_button.uri = url_for_day_path(path)
+	link_button.text = path.replace(root_path, "").lstrip("/")
+	
+	create_sample_button.visible = not FileAccess.file_exists(path + "/sample.txt")
+	fetch_input_button.visible = not FileAccess.file_exists(path + "/input.txt")
+	
 	var files := DirAccess.get_files_at(path)
 	for file in files:
 		if file.get_extension() == "txt":
@@ -63,6 +73,7 @@ func load_day(path: String):
 
 func url_for_day_path(path: String = path_stack.front()) -> String:
 	return path.replace(root_path, "https://adventofcode.com")
+
 
 func _on_back_button_button_up() -> void:
 	navigate_back()
@@ -92,3 +103,10 @@ func _on_http_request_request_completed(result: int, _response_code: int, _heade
 		load_day(path_stack.front())
 	else:
 		print("Download failed: %d" % result)
+
+func _on_create_sample_button_button_up() -> void:
+	var file := FileAccess.open(path_stack.front() + "/sample.txt", FileAccess.WRITE)
+	file.store_string(DisplayServer.clipboard_get())
+	file.close()
+	
+	load_day(path_stack.front())
