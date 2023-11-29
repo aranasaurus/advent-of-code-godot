@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://common/day_menu.gd" id="1_itm88"]
 [ext_resource type="PackedScene" uid="uid://dqk3bucs0n7pq" path="res://common/exit_button.tscn" id="2_dxtba"]
 
-[node name="PanelContainer" type="PanelContainer"]
+[node name="Menu" type="PanelContainer"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
