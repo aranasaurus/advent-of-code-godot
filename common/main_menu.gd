@@ -9,6 +9,8 @@ class_name MainMenu
 @onready var create_sample_button: Button = %CreateSampleButton
 @onready var fetch_input_button: Button = %FetchInputButton
 @onready var input_choices: OptionButton = %InputChoices
+@onready var part_choices: OptionButton = %PartChoices
+
 @onready var http_request: HTTPRequest = $HTTPRequest
 
 const root_path: String = "res://entries"
@@ -116,4 +118,8 @@ func _on_create_sample_button_button_up() -> void:
 
 func _on_run_button_button_up() -> void:
 	var solution = load(path_stack.front() + "/solution.tscn").instantiate()
-	solution.run(input_choices.get_item_text(input_choices.selected))
+	var input = input_choices.get_item_text(input_choices.selected)
+	if part_choices.selected == 0:
+		solution.part_1(input)
+	else:
+		solution.part_2(input)

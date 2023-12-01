@@ -5,12 +5,22 @@ var input_dir: String:
 	get:
 		return get_script().resource_path.get_base_dir()
 
-func run(input_filename: String):
-	var path = input_dir + "/" + input_filename
-	print("Parsing %s" % path)
+func part_1(input_filename: String):
+	var calories := get_calories(input_filename)
+	print(calories.max())
+
+func part_2(input_filename: String):
+	var calories := get_calories(input_filename)
+	calories.sort()
 	
-	var input = FileAccess.get_file_as_string(path).strip_edges().replace("\r\n", "\n")
+	var top_three_sum = calories \
+		.slice(calories.size() - 3, calories.size()) \
+		.reduce(func(a, b): return a + b, 0)
 	
+	print(top_three_sum)
+	
+func get_calories(input_filename: String) -> Array:
+	var input = get_input_string(input_filename)
 	var elves = input.split("\n\n")
 	
 	var calories := []
@@ -20,4 +30,10 @@ func run(input_filename: String):
 			elf_calories += int(s)
 		calories.append(elf_calories)
 	
-	print(calories.max())
+	return calories
+	
+func get_input_string(input_filename: String) -> String:
+	var path = input_dir + "/" + input_filename
+	print("Parsing %s" % path)
+	
+	return FileAccess.get_file_as_string(path).strip_edges().replace("\r\n", "\n")
