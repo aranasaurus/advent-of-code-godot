@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbalmrkg6nyb4"]
+
+[ext_resource type="Script" path="res://entries/example/day/1/solution.gd" id="1_jbpos"]
+
+[node name="Solution" type="Node"]
+script = ExtResource("1_jbpos")
