@@ -15,8 +15,8 @@ func get_input_string(input_filename: String) -> String:
 		.strip_edges() \
 		.replace("\r\n", "\n")
 
-func part_1(input_filename: String) -> String:
+func part_1(_input_filename: String) -> String:
 	return "You need to override this function in your subclass"
 
-func part_2(input_filename: String) -> String:
+func part_2(_input_filename: String) -> String:
 	return "You need to override this function in your subclass"
