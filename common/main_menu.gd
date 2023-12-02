@@ -117,9 +117,9 @@ func _on_create_sample_button_button_up() -> void:
 	load_day(path_stack.front())
 
 func _on_run_button_button_up() -> void:
-	var solution = load(path_stack.front() + "/solution.tscn").instantiate()
+	var solution := load(path_stack.front() + "/solution.tscn").instantiate() as SolutionBase
 	var input = input_choices.get_item_text(input_choices.selected)
 	if part_choices.selected == 0:
-		solution.part_1(input)
+		print(solution.part_1(input))
 	else:
-		solution.part_2(input)
+		print(solution.part_2(input))

@@ -1,9 +1,4 @@
-extends Node
-class_name Solution2022Day1
-
-var input_dir: String:
-	get:
-		return get_script().resource_path.get_base_dir()
+extends SolutionBase
 
 func part_1(input_filename: String):
 	var calories := get_calories(input_filename)
@@ -31,9 +26,3 @@ func get_calories(input_filename: String) -> Array:
 		calories.append(elf_calories)
 	
 	return calories
-	
-func get_input_string(input_filename: String) -> String:
-	var path = input_dir + "/" + input_filename
-	print("Parsing %s" % path)
-	
-	return FileAccess.get_file_as_string(path).strip_edges().replace("\r\n", "\n")
