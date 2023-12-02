@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://hnqn2qsh62tv"]
-
-[ext_resource type="Script" path="res://entries/2022/day/1/solution.gd" id="1_38ltm"]
-
-[node name="solution" type="Node"]
-script = ExtResource("1_38ltm")
