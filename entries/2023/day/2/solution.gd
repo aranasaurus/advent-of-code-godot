@@ -20,24 +20,34 @@ class Game:
 	
 	func is_possible(red_limit: int, green_limit: int, blue_limit: int) -> bool:
 		return red <= red_limit and green <= green_limit and blue <= blue_limit
+	
+	var power: int:
+		get:
+			return red * green * blue
 
 func part_1(input_filename: String) -> String:
-	var lines = get_input_lines(input_filename)
-	
-	var red_max := 12
-	var green_max := 13
-	var blue_max := 14
+	var games := parse_games(input_filename)
 	
 	var sum := 0
-	for line: String in lines:
-		print(line)
-		var g := Game.new(line)
-		if g.is_possible(red_max, green_max, blue_max):
-			print("^ is possible " + str(g.id))
-			sum += g.id
+	for game: Game in games:
+		if game.is_possible(12, 13, 14):
+			sum += game.id
 	
 	return str(sum)
 
 func part_2(input_filename: String) -> String:
-	return "TODO: Solve today's Part 2 using " + input_filename + ". The contents of that file are: '" + get_input_string(input_filename) + "'"
+	var games := parse_games(input_filename)
+	
+	var sum := 0
+	for game: Game in games:
+		sum += game.power
+	
+	return str(sum)
 
+func parse_games(input_filename: String) -> Array:
+	var lines = get_input_lines(input_filename)
+	
+	var games := []
+	for line: String in lines:
+		games.append(Game.new(line))
+	return games
