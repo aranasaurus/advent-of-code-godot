@@ -41,16 +41,27 @@ func load_navigation_menu(path: String) -> void:
 		var button := Button.new()
 		button.text = dir
 		if path == root_path:
-			button.button_up.connect(func(): 
-				var next_path = root_path + "/%s/day" % dir
-				path_stack.push_front(next_path)
-				load_navigation_menu(next_path)
-			)
+			var year_day_path = root_path + "/%s/day" % dir
+			var day_dirs = DirAccess.get_directories_at(year_day_path)
+			for day_dir in day_dirs:
+				var day_path = year_day_path + "/" + day_dir
+				if day_has_solution_scene(day_path):
+					button.button_up.connect(func(): 
+						path_stack.push_front(year_day_path)
+						load_navigation_menu(year_day_path)
+					)
+					navigation_buttons.add_child(button)
+					break
 		else:
-			button.button_up.connect(func():
-				load_day(path + "/" + dir)
-			)
-		navigation_buttons.add_child(button)
+			var day_path = path + "/" + dir
+			if day_has_solution_scene(day_path):
+				button.button_up.connect(func():
+					load_day(day_path)
+				)
+				navigation_buttons.add_child(button)
+
+func day_has_solution_scene(day_path: String) -> bool:
+	return DirAccess.get_files_at(day_path).find("solution.tscn") >= 0
 
 func load_day(path: String):
 	if path != path_stack.front():
