@@ -1,8 +1,4 @@
-extends Node
-
-var input_dir: String:
-	get:
-		return get_script().resource_path.get_base_dir()
+extends SolutionBase
 
 var word_digit_map := {
 	"one": "1",
@@ -16,7 +12,7 @@ var word_digit_map := {
 	"nine": "9"
 }
 
-func part_1(input_filename: String):
+func part_1(input_filename: String) -> String:
 	var number_lines := get_number_lines(input_filename)
 	
 	var numbers := []
@@ -25,9 +21,9 @@ func part_1(input_filename: String):
 	print(numbers)
 	
 	var sum: int = numbers.reduce(convert_to_int_and_sum, 0)
-	print(sum)
+	return str(sum)
 
-func part_2(input_filename: String):
+func part_2(input_filename: String) -> String:
 	var number_lines := get_number_lines(input_filename, true).filter(func(line): return not line.is_empty())
 	print(number_lines)
 	var numbers := []
@@ -36,10 +32,10 @@ func part_2(input_filename: String):
 	print(numbers)
 	
 	var sum: int = numbers.reduce(convert_to_int_and_sum, 0)
-	print(sum)
+	return str(sum)
 
 func get_number_lines(input_filename: String, replace_words: bool = false) -> Array:
-	var lines := get_input_string(input_filename).split("\n")
+	var lines := get_input_lines(input_filename)
 	var number_lines = Array(lines).map(func(line: String):
 		var numbers := []
 		if replace_words:
@@ -65,9 +61,3 @@ func get_number_lines(input_filename: String, replace_words: bool = false) -> Ar
 
 func convert_to_int_and_sum(sum: int, n: String) -> int:
 	return sum + int(n)
-
-func get_input_string(input_filename: String) -> String:
-	var path = input_dir + "/" + input_filename
-	print("Parsing %s" % path)
-	
-	return FileAccess.get_file_as_string(path).strip_edges().replace("\r\n", "\n")
