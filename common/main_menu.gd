@@ -10,6 +10,7 @@ class_name MainMenu
 @onready var fetch_input_button: Button = %FetchInputButton
 @onready var input_choices: OptionButton = %InputChoices
 @onready var part_choices: OptionButton = %PartChoices
+@onready var copy_answer_button: CheckButton = %CopyAnswerButton
 
 @onready var http_request: HTTPRequest = $HTTPRequest
 
@@ -130,7 +131,13 @@ func _on_create_sample_button_button_up() -> void:
 func _on_run_button_button_up() -> void:
 	var solution := load(path_stack.front() + "/solution.tscn").instantiate() as SolutionBase
 	var input = input_choices.get_item_text(input_choices.selected)
+	var answer: String
 	if part_choices.selected == 0:
-		print(solution.part_1(input))
+		answer = solution.part_1(input)
 	else:
-		print(solution.part_2(input))
+		answer = solution.part_2(input)
+	
+	print(answer)
+	if copy_answer_button.button_pressed:
+		DisplayServer.clipboard_set(answer)
+		print("Copied to your clipboard")
