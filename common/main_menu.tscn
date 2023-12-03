@@ -12,7 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_5rpxc")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="MainPanel" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -26,52 +26,52 @@ offset_bottom = 33.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="NavigationButtons" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="NavigationButtons" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 alignment = 1
 
-[node name="DayButtons" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="DayButtons" type="VBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="LinkButton" type="LinkButton" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons"]
+[node name="LinkButton" type="LinkButton" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 text = "View Day Page"
 underline = 1
 
-[node name="CreateSampleButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons"]
+[node name="CreateSampleButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Create sample.txt"
 
-[node name="FetchInputButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons"]
+[node name="FetchInputButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Fetch input.txt"
 
-[node name="Spacer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons"]
+[node name="Spacer" type="Control" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons"]
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Choices" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons"]
+[node name="Choices" type="HBoxContainer" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons"]
 layout_mode = 2
 
-[node name="PartChoices" type="OptionButton" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons/Choices"]
+[node name="PartChoices" type="OptionButton" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons/Choices"]
 unique_name_in_owner = true
 layout_mode = 2
 item_count = 2
@@ -81,43 +81,72 @@ popup/item_0/id = 0
 popup/item_1/text = "Part 2"
 popup/item_1/id = 1
 
-[node name="InputChoices" type="OptionButton" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons/Choices"]
+[node name="InputChoices" type="OptionButton" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons/Choices"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RunButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons"]
+[node name="RunButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Run
 "
 
-[node name="CopyAnswerButton" type="CheckButton" parent="PanelContainer/MarginContainer/VBoxContainer/DayButtons"]
+[node name="CopyAnswerButton" type="CheckButton" parent="MainPanel/MarginContainer/VBoxContainer/DayButtons"]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Copy Answer to Clipboard"
 
-[node name="Spacer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Spacer" type="Control" parent="MainPanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="BackButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Back
 "
 
-[node name="ExitButton" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("2_6odqw")]
+[node name="ExitButton" parent="MainPanel/MarginContainer/VBoxContainer" instance=ExtResource("2_6odqw")]
 layout_mode = 2
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
-[connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/DayButtons/CreateSampleButton" to="." method="_on_create_sample_button_button_up"]
-[connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/DayButtons/FetchInputButton" to="." method="_on_get_input_button_button_up"]
-[connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/DayButtons/RunButton" to="." method="_on_run_button_button_up"]
-[connection signal="button_up" from="PanelContainer/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_button_up"]
+[node name="LogPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="LogPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="LogLabel" type="RichTextLabel" parent="LogPanel/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 0
+focus_mode = 2
+scroll_following = true
+context_menu_enabled = true
+selection_enabled = true
+
+[connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/CreateSampleButton" to="." method="_on_create_sample_button_button_up"]
+[connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/FetchInputButton" to="." method="_on_get_input_button_button_up"]
+[connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/RunButton" to="." method="_on_run_button_button_up"]
+[connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_button_up"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

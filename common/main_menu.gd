@@ -13,6 +13,8 @@ class_name MainMenu
 @onready var copy_answer_button: CheckButton = %CopyAnswerButton
 
 @onready var http_request: HTTPRequest = $HTTPRequest
+@onready var log_label: RichTextLabel = %LogLabel
+@onready var log_panel: PanelContainer = %LogPanel
 
 const root_path: String = "res://entries"
 var path_stack := [root_path]
@@ -88,6 +90,10 @@ func load_day(path: String):
 func url_for_day_path(path: String = path_stack.front()) -> String:
 	return path.replace(root_path, "https://adventofcode.com")
 
+func log_message(message: String) -> void:
+	log_panel.visible = true
+	log_label.text += "\n" + message
+	# print(message)
 
 func _on_back_button_button_up() -> void:
 	navigate_back()
@@ -101,24 +107,24 @@ func _on_get_input_button_button_up() -> void:
 	var url = url_for_day_path(path) + "/input"
 	var session_path := "res://common/session.txt"
 	if not FileAccess.file_exists(session_path):
-		print("Session not found in %s" % session_path)
-		print("Opening %s in your browser so you can pull the cookie/session from your inspection tab / request headers. Paste the session value (just the value, no 'session=' or 'session: ') into res://common/session.txt. Don't worry, that file is ignored in the .gitignore." % url)
+		log_message("Session not found in %s" % session_path)
+		log_message("Opening %s in your browser so you can pull the cookie/session from your inspection tab / request headers. Paste the session value (just the value, no 'session=' or 'session: ') into res://common/session.txt. Don't worry, that file is ignored in the .gitignore." % url)
 		OS.shell_open(url)
 		return
 	
 	var cookie := "Cookie: session=%s" % FileAccess.get_file_as_string(session_path).strip_edges()
-	print("Downloading input.txt from " + url + " using cookie '%s'" % cookie)
+	log_message("Downloading input.txt from " + url + " using cookie '%s'" % cookie)
 	http_request.request(url, [cookie])
 
 func _on_http_request_request_completed(result: int, _response_code: int, _headers: PackedStringArray, _body: PackedByteArray) -> void:
 	# TODO: Make a Toast system of some kind and show these messages (or something similar) in the UI
-	print("Request completed")
+	log_message("Request completed")
 	if result == HTTPRequest.RESULT_SUCCESS:
-		print("Successfully downloaded %d bytes" % http_request.get_downloaded_bytes())
+		log_message("Successfully downloaded %d bytes" % http_request.get_downloaded_bytes())
 		load_day(path_stack.front())
 	else:
-		print("Download failed: %d" % result)
-		print("Opening the input file in a browser instead.")
+		log_message("Download failed: %d" % result)
+		log_message("Opening the input file in a browser instead.")
 		OS.shell_open(url_for_day_path() + "/input")
 
 func _on_create_sample_button_button_up() -> void:
@@ -131,13 +137,15 @@ func _on_create_sample_button_button_up() -> void:
 func _on_run_button_button_up() -> void:
 	var solution := load(path_stack.front() + "/solution.tscn").instantiate() as SolutionBase
 	var input = input_choices.get_item_text(input_choices.selected)
+	
+	log_message("Running...")
 	var answer: String
 	if part_choices.selected == 0:
 		answer = solution.part_1(input)
 	else:
 		answer = solution.part_2(input)
 	
-	print(answer)
+	log_message("Answer: " + answer)
 	if copy_answer_button.button_pressed:
 		DisplayServer.clipboard_set(answer)
-		print("Copied to your clipboard")
+		log_message("Copied to your clipboard")
