@@ -136,6 +136,7 @@ func _on_create_sample_button_button_up() -> void:
 
 func _on_run_button_button_up() -> void:
 	var solution := load(path_stack.front() + "/solution.tscn").instantiate() as SolutionBase
+	solution.logger = log_message
 	var input = input_choices.get_item_text(input_choices.selected)
 	
 	log_message("Running...")
