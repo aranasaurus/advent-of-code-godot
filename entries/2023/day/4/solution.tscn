@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bb1xysdvaal2"]
+
+[ext_resource type="Script" path="res://entries/2023/day/4/solution.gd" id="1_82tvy"]
+
+[node name="Solution" type="Node"]
+script = ExtResource("1_82tvy")
