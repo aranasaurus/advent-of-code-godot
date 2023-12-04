@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://wnfaqu4vv6gt"]
+[gd_scene load_steps=2 format=3 uid="uid://wnfaqu4vv6gt"]
 
 [ext_resource type="Script" path="res://common/main_menu.gd" id="1_5rpxc"]
-[ext_resource type="PackedScene" uid="uid://dqk3bucs0n7pq" path="res://common/exit_button.tscn" id="2_6odqw"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -111,8 +110,9 @@ layout_mode = 2
 text = "Back
 "
 
-[node name="ExitButton" parent="MainPanel/MarginContainer/VBoxContainer" instance=ExtResource("2_6odqw")]
+[node name="ExitButton" type="Button" parent="MainPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+text = "Exit"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
@@ -147,6 +147,10 @@ selection_enabled = true
 
 [connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/CreateSampleButton" to="." method="_on_create_sample_button_button_up"]
 [connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/FetchInputButton" to="." method="_on_get_input_button_button_up"]
+[connection signal="item_selected" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/Choices/PartChoices" to="." method="_on_part_choices_item_selected"]
+[connection signal="item_selected" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/Choices/InputChoices" to="." method="_on_input_choices_item_selected"]
 [connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/RunButton" to="." method="_on_run_button_button_up"]
+[connection signal="toggled" from="MainPanel/MarginContainer/VBoxContainer/DayButtons/CopyAnswerButton" to="." method="_on_copy_answer_button_toggled"]
 [connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_button_up"]
+[connection signal="button_up" from="MainPanel/MarginContainer/VBoxContainer/ExitButton" to="." method="_on_exit_button_button_up"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]
