@@ -33,7 +33,24 @@ func part_1(input_filename):
 	return str(product)
 
 func part_2(input_filename):
-	return "TODO: Solve today's Part 2 using " + input_filename + ". The contents of that file are: '" + get_input_string(input_filename) + "'"
+	var lines := get_input_lines(input_filename)
+	var time := int(lines[0].split(": ")[1].replace(" ", ""))
+	var distance := int(lines[1].split(": ")[1].replace(" ", ""))
+
+	var count := 0
+	for button_time in range(time, 0, -1):
+		var speed = button_time
+		var go_time = time - button_time
+		var this_distance = speed * go_time
+		if this_distance > distance:
+			count += 1
+		elif count > 0:
+			# We've entered and exited the window of opportunity to win at this point, no need to calculate the remaining button_times
+			break
+	
+	log_message("Expected sample result: 71503")
+	log_message("Epected input result: 40087680")
+	return str(count)
 
 func parse_ints(strings: PackedStringArray) -> Array:
 	return Array(strings) \
