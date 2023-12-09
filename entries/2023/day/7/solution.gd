@@ -1,4 +1,20 @@
-extends SolutionBase
+class_name Day7Solution extends SolutionBase
+
+static var card_map := {
+	"2" = 2,
+	"3" = 3,
+	"4" = 4,
+	"5" = 5,
+	"6" = 6,
+	"7" = 7,
+	"8" = 8,
+	"9" = 9,
+	"T" = 10,
+	"J" = 11,
+	"Q" = 12,
+	"K" = 13,
+	"A" = 14
+}
 
 func part_1(input_filename: String) -> String:
 	var lines := get_input_lines(input_filename)
@@ -19,7 +35,22 @@ func part_1(input_filename: String) -> String:
 	return str(result)
 
 func part_2(input_filename: String) -> String:
-	return "TODO: Solve today's Part 2 using " + input_filename + ". The contents of that file are: '" + get_input_string(input_filename) + "'"
+	var lines := get_input_lines(input_filename)
+	var hands: Array[Hand] = []
+	Day7Solution.card_map["J"] = 1
+	
+	for line in lines:
+		Hand.parse(line).insert_into(hands)
+	
+	hands.reverse()
+	
+	var result := 0
+	for i in range(hands.size()):
+		result += hands[i].bid * (i + 1)
+	
+	log_message("Expected Sample: 5905")
+	log_message("Expected Input: < 252695264")
+	return str(result)
 
 enum HandType {
 	FiveOfAKind = 0,
@@ -58,14 +89,14 @@ class Hand:
 			return false
 			
 		for ci in range(cards.length()):
-			if card_map[cards[ci]] > card_map[other.cards[ci]]:
+			if Day7Solution.card_map[cards[ci]] > Day7Solution.card_map[other.cards[ci]]:
 				return true
-			elif card_map[cards[ci]] < card_map[other.cards[ci]]:
+			elif Day7Solution.card_map[cards[ci]] < Day7Solution.card_map[other.cards[ci]]:
 				return false
 		
 		return false
 	
-	static func parse(line: String) -> Hand:
+	static func parse(line: String, j_is_for_joker: bool = false) -> Hand:
 		var hand := Hand.new()
 		
 		hand.bid = int(line.split(" ")[1])
@@ -77,35 +108,36 @@ class Hand:
 				counts[c] = 0
 			counts[c] += 1
 		
-		match counts.keys().size():
-			1: hand.hand_type = HandType.FiveOfAKind
-			2: 
-				if counts.values().has(4):
-					hand.hand_type = HandType.FourOfAKind
-				else:
-					hand.hand_type = HandType.FullHouse
-			3: 
-				if counts.values().has(3):
+		if counts.has("J"):
+			var joker_count: int = counts["J"]
+			counts["J"] = null
+			match counts.keys().size():
+				1: # AAAAJ
+					hand.hand_type = HandType.FiveOfAKind
+				2: # AAKKJ
+					if counts.values().has("2") and joker_count == 1:
+						hand.hand_type = HandType.FullHouse
+					else: # AAAKJ, AKJJJ, AAKJJ
+						hand.hand_type = HandType.FourOfAKind
+				3: # AKQJJ, AAKQJ 
 					hand.hand_type = HandType.ThreeOfAKind
-				else:
-					hand.hand_type = HandType.TwoPair
-			4: hand.hand_type = HandType.OnePair
-			_: hand.hand_type = HandType.HighCard
+				4: # AKQTJ
+					hand.hand_type = HandType.OnePair
+		else:
+			match counts.keys().size():
+				1: hand.hand_type = HandType.FiveOfAKind
+				2: 
+					if counts.values().has(4):
+						hand.hand_type = HandType.FourOfAKind
+					else:
+						hand.hand_type = HandType.FullHouse
+				3: 
+					if counts.values().has(3):
+						hand.hand_type = HandType.ThreeOfAKind
+					else:
+						hand.hand_type = HandType.TwoPair
+				4: hand.hand_type = HandType.OnePair
+				_: hand.hand_type = HandType.HighCard
 		
 		return hand
 
-const card_map := {
-	"2" = 2,
-	"3" = 3,
-	"4" = 4,
-	"5" = 5,
-	"6" = 6,
-	"7" = 7,
-	"8" = 8,
-	"9" = 9,
-	"T" = 10,
-	"J" = 11,
-	"Q" = 12,
-	"K" = 13,
-	"A" = 14
-}
