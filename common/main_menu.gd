@@ -22,6 +22,12 @@ func _ready() -> void:
 	ui_state = UIState.load_or_create()
 	load_from_state()
 
+func _process(_delta: float) -> void:
+	if Input.is_key_pressed(KEY_H):
+		visible = false
+	else:
+		visible = true
+
 func load_from_state() -> void:
 	if ui_state.is_current_path_day():
 		load_day(ui_state.current_path())
@@ -150,8 +156,13 @@ func _on_create_sample_button_button_up() -> void:
 	load_day(ui_state.current_path())
 
 func _on_run_button_button_up() -> void:
-	var solution := load(ui_state.current_path() + "/solution.tscn").instantiate() as SolutionBase
-	solution.logger = log_message
+	var solution = get_parent().find_child("solution", false, false)
+	if solution == null:
+		solution = load(ui_state.current_path() + "/solution.tscn").instantiate() as SolutionBase
+		solution.logger = log_message
+		solution.name = "solution"
+		add_sibling(solution)
+	
 	var input = input_choices.get_item_text(input_choices.selected)
 	
 	log_message("Running...")
